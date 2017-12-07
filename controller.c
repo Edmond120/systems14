@@ -20,7 +20,7 @@ void flag_c(int argc,char ** argv){//creates a semaphore
 		}
 	}
 	if(descriptor == -1){
-		descriptor = semget(key,1,IPC_CREAT);
+		descriptor = semget(key,1,IPC_CREAT | 0600);
 		semctl(descriptor,0,SETVAL,atoi(argv[2]));
 		printf("semaphore created: %d\n",descriptor);
 	}
@@ -35,7 +35,7 @@ void flag_v(){//views a semaphore
 		return;
 	}
 	else{
-		printf("semaphore value: %d",semctl(descriptor,0,GETVAL));
+		printf("semaphore value: %d\n",semctl(descriptor,0,GETVAL));
 	}
 }
 void flag_r(){//removes a semaphore
@@ -59,6 +59,7 @@ int main(int argc, char ** argv){
 		printf("usage:\n-c <N>\n    creates a semaphore and sets its value to N\n\n-v\n    view the current value of the semaphore\n\n-r\n    removes the semaphore\n");
 		return 0;
 	}
+	descriptor = semget(key,1,0);
 	if(!strcmp(argv[1],"-c")){
 		flag_c(argc,argv);
 	}
